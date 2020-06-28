@@ -1,10 +1,10 @@
-package _5_3sum
+package go_leetcode
 
 import (
 	"sort"
 )
 
-func threeSum(nums []int) [][]int {
+func threeSum(nums []int, target int) [][]int {
 
 	results := [][]int{}
 
@@ -18,7 +18,7 @@ func threeSum(nums []int) [][]int {
 
 			for l, r := i+1, len(nums)-1; l < r; {
 
-				if nums[l]+nums[r] == -1*nums[i] {
+				if nums[i]+nums[l]+nums[r] == target {
 					// 找到一个匹配，记录并调整搜索的左右边界
 					results = append(results, []int{nums[i], nums[l], nums[r]})
 					l++
@@ -31,7 +31,7 @@ func threeSum(nums []int) [][]int {
 					for r > l && nums[r] == nums[r+1] {
 						r--
 					}
-				} else if nums[l]+nums[r] > -1*nums[i] {
+				} else if nums[i]+nums[l]+nums[r] > target {
 					// 调整右边界
 					r--
 				} else {
@@ -46,4 +46,9 @@ func threeSum(nums []int) [][]int {
 		return results
 	}
 	return nil
+}
+
+// ThreeSumEqualTarget 从nums中找出三个数字相加之和等于target，排除重复的三元组
+func ThreeSumEqualTarget(nums []int, target int) [][]int {
+	return threeSum(nums, target)
 }

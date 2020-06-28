@@ -1,4 +1,4 @@
-package _5_3sum
+package go_leetcode
 
 import (
 	"fmt"
@@ -26,7 +26,7 @@ func Test_threeSum(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := threeSum(tt.args.nums)
+			got := threeSum(tt.args.nums, 0)
 
 			m1 := map[string]struct{}{}
 			for _, v := range got {
