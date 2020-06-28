@@ -1,6 +1,9 @@
 package go_leetcode
 
-import "bytes"
+import (
+	"bytes"
+	"math"
+)
 
 type Stage string
 
@@ -14,7 +17,7 @@ const (
 func myAtoi(str string) int {
 
 	nums := bytes.Buffer{}
-	sign := '+'
+	sign := 1
 
 	stage := StageScanPrefix
 	for _, c := range str {
@@ -27,7 +30,10 @@ func myAtoi(str string) int {
 			fallthrough
 		case StageScanSign:
 			if c == '+' || c == '-' {
-				sign = c
+				if c == '-' {
+					sign = -1
+				}
+				stage = StageScanNum
 				continue
 			}
 			stage = StageScanNum
@@ -45,13 +51,19 @@ func myAtoi(str string) int {
 	}
 
 	num := 0
+	res := 0
 	if nums.Len() != 0 {
 		for _, v := range nums.Bytes() {
 			num = num*10 + int(v-48)
+			res = num * sign
+			if res > math.MaxInt32 {
+				return math.MaxInt32
+			}
+			if res < math.MinInt32 {
+				return math.MinInt32
+			}
 		}
-		if sign == '-' {
-			num = num * -1
-		}
+		return res
 	}
-	return num
+	return res
 }
