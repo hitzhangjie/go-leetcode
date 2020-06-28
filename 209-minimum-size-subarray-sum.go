@@ -21,68 +21,70 @@ func checkParams(s int, nums []int) int {
 
 func minSubArrayLen(s int, nums []int) int {
 
-	// 先排除没有解的情况
+	// 先排除特殊解的情况
 	n := checkParams(s, nums)
 	if n == 0 || n == 1 {
 		return n
 	}
-
 	// 重点关注有解的情况
-	minLength := math.MaxInt64
-	minStat := stat{}
-	stats := make([]stat, len(nums))
+	minlen := math.MaxInt64
+	minstat := stat{}
+	preStat := stat{}
+	curStat := stat{}
 
 	for i := 0; i < len(nums); i++ {
-
 		if i == 0 {
-			stats[0].sum = nums[i]
+			curStat.sum = nums[i]
+			continue
+		}
+		preStat = curStat
+
+		st := stat{
+			preStat.startIdx,
+			i,
+			preStat.sum + nums[i],
+		}
+		if st.sum < s {
+			curStat = st
 			continue
 		}
 
-		st := stat{
-			stats[i-1].startIdx,
-			i,
-			stats[i-1].sum + nums[i],
-		}
-
-		//step := 1
-
-		if st.sum >= s {
-			// 更新minStat
-			if nLen := st.stopIdx - st.startIdx + 1; nLen <= minLength {
-				minLength = nLen
-				minStat = st
-				// 要回溯一下看当前区间内去掉某些前缀，能否得到符合要求的更小长度的区间
-				tmp := minStat.sum
-
-				for j := minStat.startIdx; j < minStat.stopIdx; j++ {
-					fmt.Printf("%d - %d = %d\n", tmp, nums[j], tmp-nums[j])
-					tmp -= nums[j]
-					if tmp >= s {
-						minStat.startIdx++
-						//step++
-						minStat.sum = tmp
-						minLength--
-						//fmt.Println(minStat)
-					} else {
-						break
-					}
-				}
-				st = minStat
-			}
-
-			for j := st.startIdx; j < st.startIdx+1; j++ {
-				st.sum -= nums[j]
-			}
-			st.startIdx = st.startIdx + 1
-			stats[i] = st
+		step := 1
+		if nlen := st.stopIdx - st.startIdx + 1; nlen > minlen {
+			// todo 优化查询效率的问题，不应该影响正确性
+			//step += nlen - minlen
+			step = 1
+			goto HERE
 
 		} else {
-			stats[i] = st
+			minlen = nlen
+			minstat = st
+			// 当前区间去掉某些前缀，能否得到符合要求的更小长度的区间
+			tmp := minstat.sum
+			for j := minstat.startIdx; j < minstat.stopIdx; j++ {
+				//fmt.Printf("%d - %d = %d\n", tmp, nums[j], tmp-nums[j])
+				tmp -= nums[j]
+				if tmp >= s {
+					minstat.startIdx++
+					minstat.sum = tmp
+					minlen--
+					//fmt.Println(minstat)
+				} else {
+					break
+				}
+			}
+			st = minstat
 		}
+	HERE:
+		for j, jm := st.startIdx, st.startIdx+step; j < jm && j < st.stopIdx; j++ {
+			st.startIdx++
+			st.sum -= nums[j]
+		}
+		curStat = st
 	}
+	fmt.Println(minstat)
 
-	return minLength
+	return minlen
 }
 
 type stat struct {
