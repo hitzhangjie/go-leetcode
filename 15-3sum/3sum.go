@@ -24,11 +24,11 @@ func threeSum(nums []int) [][]int {
 					l++
 					r--
 					// 跳过相同的
-					for nums[l] == nums[l-1] {
+					for l < r && nums[l] == nums[l-1] {
 						l++
 					}
 					// 跳过相同的
-					for nums[r] == nums[r+1] {
+					for r > l && nums[r] == nums[r+1] {
 						r--
 					}
 				} else if nums[l]+nums[r] > -1*nums[i] {
