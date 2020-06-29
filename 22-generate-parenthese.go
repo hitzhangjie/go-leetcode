@@ -10,6 +10,7 @@ var matchesParenthese = map[rune]rune{
 	'{': '}',
 }
 
+// 测试用例通过，but timeout
 func generateParenthesis(n int) []string {
 	result := []string{}
 
