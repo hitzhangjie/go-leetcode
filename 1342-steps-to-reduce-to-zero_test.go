@@ -11,7 +11,9 @@ func Test_numberOfSteps(t *testing.T) {
 		args args
 		want int
 	}{
-		// TODO: Add test cases.
+		{"case-14", args{14}, 6},
+		{"case-4", args{8}, 4},
+		{"case-5", args{123}, 12},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
