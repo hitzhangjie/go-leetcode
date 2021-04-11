@@ -5,10 +5,13 @@ func convert(s string, numRows int) string {
 
 	// 矩阵大小 numRows x numCols，列式存储就可以了
 	matrix := newMatrx(numRows, numCols)
+	_ = matrix
 
 	it := 0
+	_ = it
 	for cIdx := 0; cIdx < numRows; cIdx++ {
 		topToBottom := true
+		_ = topToBottom
 		if cIdx == 0 {
 
 		} else {
